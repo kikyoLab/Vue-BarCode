@@ -46,13 +46,39 @@
         <el-button type="primary" @click="CrtBarCode()">确 定</el-button>
       </div>
     </el-dialog>
+    <VueDragResize
+      v-for="(i, index) in num"
+      :key="index"
+      :w="150"
+      :h="100"
+      @resizing="resize"
+      @dragging="resize"
+      @clicked="onActivated"
+      @deactivated="onDeactivated"
+    >
+      <svg
+        class="barcode"
+        :jsbarcode-format="form.barcodeType"
+        :jsbarcode-value="form.barcodeId"
+        jsbarcode-textmargin="0"
+        jsbarcode-fontoptions="bold"
+        jsbarcode-width="1"
+        jsbarcode-height="50"
+        @dblclick="formEdit()"
+      ></svg>
+    </VueDragResize>
   </span>
 </template>
 
 <script>
+import JsBarcode from "jsbarcode";
+import VueDragResize from "vue-drag-resize";
+
 export default {
   name: "CrtBarCode",
-  props: ["num"],
+  components: {
+    VueDragResize
+  },
   data() {
     return {
       dialogFormVisible: false,
@@ -68,13 +94,32 @@ export default {
       },
       formLabelWidth: "120px",
       barcodeWidth: 0,
-      barcodeHeight: 0
+      barcodeHeight: 0,
+      num: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      left: 0
     };
   },
   methods: {
+    resize(newRect) {
+      this.width = newRect.width;
+      this.height = newRect.height;
+      this.top = newRect.top;
+      this.left = newRect.left;
+    },
+
     CrtBarCode: function() {
       this.dialogFormVisible = false;
-      this.$emit("success", false);
+      this.num++;
+      setTimeout(() => {
+        JsBarcode(".barcode").init();
+      }, 100);
+    },
+
+    formEdit: function() {
+      this.dialogFormVisible = true;
     }
   }
 };

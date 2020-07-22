@@ -3,7 +3,7 @@
     <el-header>
       <span class="hiddenText">正在操作XXX模板</span>
       <CrtText />
-      <CrtBarCode :num="num" @success="success()" />
+      <CrtBarCode />
       <CrtQarCode />
       <el-button
         type="primary"
@@ -61,25 +61,7 @@
     </el-header>
     <el-container>
       <el-main>
-        <div id="printMain">
-          <div
-            v-for="(i, index) in num"
-            :id="'code' + i"
-            :key="index"
-            style="position: fixed; margin: 0;display：inline; overflow: hidden;z-index:2"
-            class="BarCodedbclick refbox"
-          >
-            div
-            <svg
-              :id="'BarCode' + i"
-              class="barcode"
-              jsbarcode-format="upc"
-              jsbarcode-value="123456789012"
-              jsbarcode-textmargin="0"
-              jsbarcode-fontoptions="bold"
-            ></svg>
-          </div>
-        </div>
+        <div id="printMain"></div>
       </el-main>
       <el-aside width="240px">
         <el-form
@@ -120,7 +102,6 @@ import CrtBarCode from "../components/barcode";
 import CrtText from "../components/text";
 import CrtQarCode from "../components/qarcode";
 import Tmpl from "../components/template";
-import JsBarcode from "jsbarcode";
 
 export default {
   name: "Design",
@@ -141,16 +122,10 @@ export default {
         labelTB: "0",
         pageLR: "0",
         pageTB: "0"
-      },
-      num: 0
+      }
     };
   },
   methods: {
-    success: function() {
-      this.num++;
-      JsBarcode(".barcode").init();
-    },
-
     CrtPic: function() {},
 
     CrtLine: function() {},
